@@ -10,7 +10,12 @@
     "require": {
 
     },
+    "suggest": {
+        "borisguery/coretracker-bundle": "Integrate into a Symfony2 applicaton and provide Commands to work with the Core Dump"
+    },
     "autoload": {
         "psr-0": { "Bgy" : "lib/" }
-    }
+    },
+
+    "minimum-stability": "dev"
 }
