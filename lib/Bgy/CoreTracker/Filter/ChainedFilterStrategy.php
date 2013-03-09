@@ -21,10 +21,7 @@ class ChainedFilterStrategy implements FilterStrategyInterface
         $shouldBeFiltered = false;
         /** @var $filter FilterStrategyInterface */
         foreach ($this->filters as $filter) {
-
-            var_dump($shouldBeFiltered);
             $shouldBeFiltered |= $filter->shouldBeFiltered($collectedClass, $inverse);
-            var_dump($shouldBeFiltered);
         }
 
         return $shouldBeFiltered;
