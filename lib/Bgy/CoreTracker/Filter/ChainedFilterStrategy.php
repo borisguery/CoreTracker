@@ -2,6 +2,8 @@
 
 namespace Bgy\CoreTracker\Filter;
 
+use Bgy\CoreTracker\CollectedClass;
+
 class ChainedFilterStrategy implements FilterStrategyInterface
 {
     private $filters = array();
@@ -12,11 +14,11 @@ class ChainedFilterStrategy implements FilterStrategyInterface
     }
 
     /**
-     * @param array $collectedClass
+     * @param CollectedClass $collectedClass
      * @param bool $inverse
      * @return boolean
      */
-    public function shouldBeFiltered($collectedClass, $inverse = null)
+    public function shouldBeFiltered(CollectedClass $collectedClass, $inverse = false)
     {
         $shouldBeFiltered = false;
         /** @var $filter FilterStrategyInterface */

@@ -2,6 +2,8 @@
 
 namespace Bgy\CoreTracker\Filter;
 
+use Bgy\CoreTracker\CollectedClass;
+
 class CallThresholdFilterStrategy implements FilterStrategyInterface
 {
     protected $threshold;
@@ -12,16 +14,16 @@ class CallThresholdFilterStrategy implements FilterStrategyInterface
     }
 
     /**
-     * @param array $collectedClass
+     * @param CollectedClass $collectedClass
      * @param bool $inverse
      * @return boolean
      */
-    public function shouldBeFiltered($collectedClass, $inverse = false)
+    public function shouldBeFiltered(CollectedClass $collectedClass, $inverse = false)
     {
 
         return $inverse
-            ? $collectedClass['calls'] > $this->threshold
-            : $collectedClass['calls'] < $this->threshold
+            ? $collectedClass->calls > $this->threshold
+            : $collectedClass->calls < $this->threshold
         ;
     }
 }

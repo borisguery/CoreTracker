@@ -2,25 +2,27 @@
 
 namespace Bgy\CoreTracker\Sorter;
 
+use Bgy\CoreTracker\CoreDump;
+
 class ChainedSorterStrategy implements SorterStrategyInterface
 {
-    private $sorter = array();
+    private $sorters = array();
 
-    public function __construct(array $sorter)
+    public function __construct(array $sorters)
     {
-        $this->sorter = $sorter;
+        $this->sorters = $sorters;
     }
 
     /**
-     * @param array $collectedData
+     * @param CoreDump $coredump
      * @param bool  $reverse
      * @return void
      */
-    public function sort(array &$collectedData, $reverse = false)
+    public function sort(CoreDump $coredump, $reverse = false)
     {
         /** @var $sorter SorterStrategyInterface */
-        foreach ($this->sorter as $sorter) {
-            $sorter->sort($collectedData);
+        foreach ($this->sorters as $sorter) {
+            $sorter->sort($coredump);
         }
     }
 }

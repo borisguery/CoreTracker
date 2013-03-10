@@ -2,6 +2,8 @@
 
 namespace Bgy\CoreTracker\Filter;
 
+use Bgy\CoreTracker\CollectedClass;
+
 class NamespaceFilterStrategy implements FilterStrategyInterface
 {
     protected $namespaces;
@@ -15,22 +17,20 @@ class NamespaceFilterStrategy implements FilterStrategyInterface
     }
 
     /**
-     * @param array $collectedClass
+     * @param CollectedClass $collectedClass
      * @param bool $inverse
      * @return boolean
      */
-    public function shouldBeFiltered($collectedClass, $inverse = null)
+    public function shouldBeFiltered(CollectedClass $collectedClass, $inverse = false)
     {
         $inverse = $inverse ?: $this->inverse;
 
         $shouldBeFiltered = false;
         foreach ($this->namespaces as $namespace) {
             $shouldBeFiltered = $inverse
-                ? false === strpos($collectedClass['className'], $namespace)
-                : 0 === strpos($collectedClass['className'], $namespace);
+                ? false === strpos($collectedClass->className, $namespace)
+                : 0 === strpos($collectedClass->className, $namespace);
         }
-
-//        var_dump($shouldBeFiltered);
 
         return $shouldBeFiltered;
     }

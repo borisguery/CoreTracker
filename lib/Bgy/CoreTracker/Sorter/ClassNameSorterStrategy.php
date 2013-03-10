@@ -2,6 +2,8 @@
 
 namespace Bgy\CoreTracker\Sorter;
 
+use Bgy\CoreTracker\CoreDump;
+
 class ClassNameSorterStrategy implements SorterStrategyInterface
 {
     private $reverse;
@@ -12,21 +14,21 @@ class ClassNameSorterStrategy implements SorterStrategyInterface
     }
 
     /**
-     * @param array $collectedData
+     * @param CoreDump $coredump
      * @param bool  $reverse
      * @return void
      */
-    public function sort(array &$collectedData, $reverse = null)
+    public function sort(CoreDump $coredump, $reverse = null)
     {
         $reverse = ($reverse) ? $reverse : $this->reverse;
 
-        usort($collectedData, function($a, $b) use ($reverse) {
+        uasort($coredump->getCollectedData(), function($a, $b) use ($reverse) {
 
             if ($reverse) {
-                return strcasecmp($b['className'], $a['className']);
+                return strcasecmp($b->className, $a->className);
             }
 
-            return strcasecmp($a['className'], $b['className']);
+            return strcasecmp($a->className, $b->className);
         });
     }
 }

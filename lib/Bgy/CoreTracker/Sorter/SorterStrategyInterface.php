@@ -2,7 +2,9 @@
 
 namespace Bgy\CoreTracker\Sorter;
 
+use Bgy\CoreTracker\CoreDump;
+
 interface SorterStrategyInterface
 {
-    public function sort(array &$collectedData, $reverse = false);
+    public function sort(CoreDump $coredump, $reverse = false);
 }

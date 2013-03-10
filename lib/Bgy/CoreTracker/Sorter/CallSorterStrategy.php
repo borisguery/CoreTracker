@@ -2,6 +2,8 @@
 
 namespace Bgy\CoreTracker\Sorter;
 
+use Bgy\CoreTracker\CoreDump;
+
 class CallSorterStrategy implements SorterStrategyInterface
 {
     private $reverse;
@@ -12,21 +14,21 @@ class CallSorterStrategy implements SorterStrategyInterface
     }
 
     /**
-     * @param array $collectedData
+     * @param CoreDump $coredump
      * @param bool  $reverse
      * @return void
      */
-    public function sort(array &$collectedData, $reverse = null)
+    public function sort(CoreDump $coredump, $reverse = null)
     {
         $reverse = ($reverse) ? $reverse : $this->reverse;
 
-        usort($collectedData, function($a, $b) use ($reverse) {
+        uasort($coredump->getCollectedData(), function($a, $b) use ($reverse) {
 
             if ($reverse) {
-                return strcasecmp($b['calls'], $a['calls']);
+                return $b->calls > $a->calls;
             }
 
-            return strcasecmp($a['calls'], $b['calls']);
+            return $b->calls < $a->calls;
         });
     }
 }
