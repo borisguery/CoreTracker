@@ -1,13 +1,28 @@
 #!/usr/bin/env php
 <?php
 
-if ($argc<3) {
-
-    printf("usage: %s [classCount] [iterations]\n", $argv[0]);
-    exit(-1);
+function usage($appName) {
+    printf("usage: %s [-k] [classCount] [iterations]\n", $appName);
 }
 
-list(, $classCount, $iterations) = $argv;
+if ($argc<3) {
+    usage($argv[0]);
+    exit(-1);
+} elseif (4===$argc) {
+    $appName = array_shift($argv);
+    if ('-k' !== ($option = array_shift($argv))) {
+        printf("Unknown option: %s\n", $option);
+        usage($appName);
+        exit(-1);
+    }
+
+    list(, , $classCount, $iterations) = $argv;
+    $keepFiles = true;
+} else {
+    $keepFiles = false;
+    list(, $classCount, $iterations) = $argv;
+}
+
 
 $file = __DIR__.'/../vendor/autoload.php';
 if (!file_exists($file)) {
@@ -117,13 +132,31 @@ printf("│  Average     |  % 10f      |  % 10f      │\n",
     array_sum($stats['coreload']) / count($stats['coreload']));
 printf("└──────────────┴──────────────────┴──────────────────┘\n");
 
+// web
 
-printf("\nCleaning files...\n\n");
+printf("\nCopying file to public folder...\n");
+$pathToFiles = trim(str_replace(sys_get_temp_dir(), '', $tempDir), ' /');
+mkdir('public/'.$pathToFiles);
+exec('cp ' . $tempDir . '/autoload.php public/' . $pathToFiles);
+exec('cp ' . $tempDir . '/coreload.php public/' . $pathToFiles);
 
-foreach(
-    new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($tempDir, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
-    $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+printf("\n");
+
+printf("phpinfo() http://coretracker/phpinfo.php\n", $pathToFiles);
+printf("\n");
+printf("Run the tests: \n");
+printf("sudo service apache2 restart && siege -t5M -c50 http://coretracker/%s/autoload.php && sudo service apache2 restart && siege -t5M -c50 http://coretracker/%s/coreload.php", $pathToFiles, $pathToFiles);
+
+printf("\n\n");
+
+if (!$keepFiles) {
+    printf("\nCleaning files...\n\n");
+
+    foreach(
+        new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($tempDir, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+        $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+    }
+
+    rmdir($tempDir);
 }
-
-rmdir($tempDir);
