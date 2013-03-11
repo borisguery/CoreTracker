@@ -8,7 +8,7 @@
         }
     ],
     "require": {
-        "symfony/class-loader": "2.1"
+        "symfony/class-loader": "2.*"
     },
     "suggest": {
         "borisguery/coretracker-bundle": "Integrate into a Symfony2 applicaton and provide Commands to work with the Core Dump"
