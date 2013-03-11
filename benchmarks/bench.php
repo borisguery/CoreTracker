@@ -16,7 +16,7 @@ if ($argc<3) {
         exit(-1);
     }
 
-    list(, , $classCount, $iterations) = $argv;
+    list($classCount, $iterations) = $argv;
     $keepFiles = true;
 } else {
     $keepFiles = false;
