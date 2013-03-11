@@ -72,14 +72,13 @@ file_put_contents($autoloadedFile, $autoloaded);
 $coreloadFile = $tempDir . DIRECTORY_SEPARATOR . 'coreload.php';
 file_put_contents($tempDir . DIRECTORY_SEPARATOR . 'coreload.php', $coreLoad);
 
-printf("Generating core\n");
-
 $tmpname = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid();
 
 spl_autoload_register(function($class) use ($tempDir) {
     $path = $tempDir . DIRECTORY_SEPARATOR . $class . '.php';
     include $path;
 });
+printf("Generating core (it may take a while)\n");
 \Symfony\Component\ClassLoader\ClassCollectionLoader::load($classNames, dirname($core), basename($core), false, false, '');
 
 $stats = array(
